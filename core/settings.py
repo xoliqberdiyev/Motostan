@@ -167,7 +167,6 @@ SWAGGER_SETTINGS = {
 
 # django-modeltranslation config
 LANGUAGES = (
-    ('en', 'English'),
     ('uz', 'Uzbek'),
     ('ru', 'Russia')
 )
