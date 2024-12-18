@@ -35,8 +35,8 @@ INSTALLED_APPS = [
     # packages
     'drf_yasg',
     'rest_framework',
-    'rest_framework_simplejwt',
     'django_filters',
+    'corsheaders',
     # local apps
     'common',
     'product',
@@ -46,6 +46,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -66,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'common.context_processors.get_languages',
             ],
         },
     },
@@ -132,3 +135,72 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# django rest framework config
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.FormParser',
+    ],
+}
+
+# django-cons-headers config
+CORS_ALLOW_ALL_ORIGINS = True
+# CSRF_TRUSTED_ORIGINS = ['http://.repid.uz/','http://127.0.0.1']
+
+# swagger config
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer {token}"',
+        }
+    },
+}
+
+# django-modeltranslation config
+LANGUAGES = (
+    ('en', 'English'),
+    ('uz', 'Uzbek'),
+    ('ru', 'Russia')
+)
+DEFAULT_MODELTRANSLATION_LANGUAGE = 'uz'
+
+
+# django-jazzmin config
+JAZZMIN_SETTINGS = {
+    "site_title": "Motostan Admin",
+    "site_header": "Motostan",
+    "site_brand": None,
+    "site_logo": None,
+    "login_logo": None,
+    "login_logo_dark": None,
+    "site_logo_classes": "img-circle",
+    "site_icon": None,
+    "welcome_sign": "Welcome to the Motostan",
+    "copyright": "Acme Motostan Ltd",
+    "search_model": [],
+    "user_avatar": None,
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": False,
+    "custom_css": None,
+    "custom_js": None,
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": False,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {},
+    "language_chooser": True,
+}
+
