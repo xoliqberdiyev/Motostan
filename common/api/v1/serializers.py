@@ -7,7 +7,7 @@ class AboutUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AboutUs
         fields = [
-            'id', 'title_uz', 'title_ru', 'image', 'description_uz', 'description_ru'
+            'id', 'title_uz', 'title_ru', 'media', 'description_uz', 'description_ru'
         ]
 
 
