@@ -1,12 +1,22 @@
 from django.contrib import admin
 
+from modeltranslation.admin import TranslationAdmin
+
 from product import models
 
-admin.site.register(models.Product)
+admin.site.register(models.Product, TranslationAdmin)
 admin.site.register(models.DiscountedProduct)
 admin.site.register(models.ProductInfo)
-admin.site.register(models.ProductCategory)
-admin.site.register(models.ProductBrand)
-admin.site.register(models.TechnicalInfoName)
-admin.site.register(models.InfoName)
+admin.site.register(models.ProductCategory, TranslationAdmin)
+admin.site.register(models.ProductBrand, TranslationAdmin)
 admin.site.register(models.Colors)
+
+
+class InfoNameInline(admin.StackedInline):
+    model = models.InfoName
+    extra = 0
+
+
+@admin.register(models.TechnicalInfoName)
+class TechInfoAdmin(admin.ModelAdmin):
+    inlines = [InfoNameInline]
