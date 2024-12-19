@@ -76,17 +76,18 @@ class ProductInfo(BaseModel):
 
 
 class Product(BaseModel):
-    brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, related_name='products')
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
+    image = models.ImageField(upload_to='product/images/')
     name = models.CharField(max_length=250)
     price = models.PositiveBigIntegerField(default=0)
-    colors = models.ManyToManyField(Colors, null=True, blank=True, related_name='products')
-    is_discount = models.BooleanField(default=False)
     discount_percentage = models.PositiveIntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
-    infos = models.ManyToManyField(ProductInfo, null=True, blank=True, related_name='products')
-    image = models.ImageField(upload_to='product/images/')
+    is_discount = models.BooleanField(default=False)
+    is_top = models.BooleanField(default=False)
+    brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, related_name='products')
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
+    colors = models.ManyToManyField(Colors, blank=True, related_name='products')
+    infos = models.ManyToManyField(ProductInfo, blank=True, related_name='products')
 
     def __str__(self):
         return self.name
@@ -94,6 +95,15 @@ class Product(BaseModel):
     class Meta:
         verbose_name = _('product')
         verbose_name_plural = _('products')
+
+
+class ProductMedia(BaseModel):
+    media = models.ImageField(upload_to='product-media/medias/')
+    product = models.ForeignKey(Product, related_name='medias', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _("product media")
+        verbose_name_plural = _("product medias")
 
 
 class DiscountedProduct(BaseModel):
