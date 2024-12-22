@@ -1,12 +1,12 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 
-from modeltranslation.admin import TranslationAdmin
+from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
 from product import models
 
 admin.site.register(models.DiscountedProduct)
 admin.site.register(models.ProductInfo)
-admin.site.register(models.ProductCategory, TranslationAdmin)
 admin.site.register(models.ProductBrand, TranslationAdmin)
 admin.site.register(models.Colors)
 
@@ -29,3 +29,29 @@ class ProductAdmin(TranslationAdmin):
 @admin.register(models.TechnicalInfoName)
 class TechInfoAdmin(admin.ModelAdmin):
     inlines = [InfoNameInline]
+    
+
+class CategoryInline(TranslationStackedInline):
+    model = models.ProductCategory
+    extra = 0
+    
+class SubCategory(TranslationStackedInline):
+    model = models.SubCategory
+    extra = 0
+    fields = ['link', 'name']
+    readonly_fields = ['link']
+    
+    def link(self, instance):
+        url = f"/admin/product/subcategory/{instance.id}/change/"
+        return mark_safe(f'<a target="_blank" href="{url}">Kirish</a>')
+
+    
+
+@admin.register(models.SubCategory)
+class SubCategoryAdmin(TranslationAdmin):
+    inlines = [CategoryInline]
+
+    
+@admin.register(models.MainCategory)
+class MainCategoryAdmin(TranslationAdmin):
+    inlines =  [SubCategory]

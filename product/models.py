@@ -16,8 +16,32 @@ class ProductBrand(BaseModel):
         verbose_name_plural = _('product brands')
 
 
+class MainCategory(BaseModel):
+    name = models.CharField(max_length=250)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _("main category")
+        verbose_name_plural = _("main categories")
+    
+
+class SubCategory(BaseModel):
+    name = models.CharField(max_length=250)
+    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name="sub_categories")
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _("sub category")
+        verbose_name_plural = _("sub categories")
+    
+
 class ProductCategory(BaseModel):
     name = models.CharField(max_length=250)
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="product_categories")
 
     def __str__(self) -> models.CharField:
         return self.name
