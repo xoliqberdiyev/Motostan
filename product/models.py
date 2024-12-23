@@ -30,7 +30,7 @@ class MainCategory(BaseModel):
 class SubCategory(BaseModel):
     name = models.CharField(max_length=250)
     main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name="sub_categories")
-    
+
     def __str__(self):
         return self.name
     
@@ -110,6 +110,8 @@ class Product(BaseModel):
     is_top = models.BooleanField(default=False)
     brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, related_name='products')
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
+    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name='products')
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products')
     colors = models.ManyToManyField(Colors, blank=True, related_name='products')
     infos = models.ManyToManyField(ProductInfo, blank=True, related_name='products')
 
@@ -119,6 +121,18 @@ class Product(BaseModel):
     class Meta:
         verbose_name = _('product')
         verbose_name_plural = _('products')
+
+    def clean(self):
+        if self.sub_category.main_category != self.main_category:
+            raise ValueError("")
+        if self.category.sub_category != self.sub_category:
+            raise ValueError("")
+
+        super().clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
 
 class ProductMedia(BaseModel):
