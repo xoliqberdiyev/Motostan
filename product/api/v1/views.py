@@ -116,15 +116,15 @@ class ProductDetailApiView(views.APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class MainCategoryApiView(views.APIView):
-    def get(self, request):
-        main_category = models.MainCategory.objects.all()
-        serializer = serializers.MainCategorySerializer(main_category, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class CategoriesListApiView(views.APIView):
-    def get(self, request):
-        categories = models.MainCategory.objects.all()
-        serializer = serializers.CategoriesListSerializer(categories, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+# class MainCategoryApiView(views.APIView):
+#     def get(self, request):
+#         main_category = models.MainCategory.objects.all()
+#         serializer = serializers.MainCategorySerializer(main_category, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#
+# class CategoriesListApiView(views.APIView):
+#     def get(self, request):
+#         categories = models.MainCategory.objects.all()
+#         serializer = serializers.CategoriesListSerializer(categories, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
