@@ -12,7 +12,7 @@ urlpatterns = [
     path('category/<int:category_id>/infos/', views.ProductInfoByCategoryApiView.as_view(), name='category-infos'),
     path('category/<int:category_id>/products/', views.ProductByCategoryApiView.as_view(), name='category-infos'),
     path('product/<int:id>/', views.ProductDetailApiView.as_view(), name='category-infos'),
-    # path('main-category/list/', views.MainCategoryApiView.as_view(), name='main-category'),
-    # path('categories/list/', views.CategoriesListApiView.as_view(), name='main-category'),
+    path('main-category/list/', views.MainCategoryApiView.as_view(), name='main-category'),
+    path('categories/list/', views.CategoriesListApiView.as_view(), name='main-category'),
 ]
 
