@@ -37,7 +37,7 @@ class SubCategory(BaseModel):
     class Meta:
         verbose_name = _("sub category")
         verbose_name_plural = _("sub categories")
-    
+
 
 class ProductCategory(BaseModel):
     name = models.CharField(max_length=250)
@@ -51,8 +51,20 @@ class ProductCategory(BaseModel):
         verbose_name_plural = _('product categories')
 
 
+class Category(BaseModel):
+    name = models.CharField(max_length=250)
+    product_category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name="categories")
+
+    def __str__(self) -> models.CharField:
+        return self.name
+
+    class Meta:
+        verbose_name = _("category")
+        verbose_name_plural = _("categories")
+
+
 class Colors(BaseModel):
-    rgba_name = models.CharField(max_length=250)
+    rgba_name = models.CharField(max_length=250, blank=True, null=True)
     name = models.CharField(max_length=250)
 
     def __str__(self) -> models.CharField:
@@ -100,18 +112,26 @@ class ProductInfo(BaseModel):
 
 
 class Product(BaseModel):
-    image = models.ImageField(upload_to='product/images/')
-    name = models.CharField(max_length=250)
+    description = models.TextField(blank=True, null=True)
+    quantity_left = models.CharField(blank=True, null=True, max_length=250)
     price = models.PositiveBigIntegerField(default=0)
+    name = models.CharField(max_length=250)
+    item = models.CharField(max_length=250, null=True, blank=True)
+
+    image = models.ImageField(upload_to='product/images/', null=True, blank=True)
     discount_percentage = models.PositiveIntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(100)]
+        validators=[MinValueValidator(0), MaxValueValidator(100)], null=True, blank=True
     )
+
     is_discount = models.BooleanField(default=False)
     is_top = models.BooleanField(default=False)
-    brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, related_name='products')
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
-    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name='products')
-    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products')
+    brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+
+    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    category_sub_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product_sub_categories', null=True, blank=True)
+
     colors = models.ManyToManyField(Colors, blank=True, related_name='products')
     infos = models.ManyToManyField(ProductInfo, blank=True, related_name='products')
 
@@ -123,10 +143,11 @@ class Product(BaseModel):
         verbose_name_plural = _('products')
 
     def clean(self):
-        if self.sub_category.main_category != self.main_category:
-            raise ValueError("")
-        if self.category.sub_category != self.sub_category:
-            raise ValueError("")
+        if self.sub_category and self.main_category and self.category and self.category_sub_category:
+            if self.sub_category.main_category != self.main_category:
+                raise ValueError("")
+            if self.category.sub_category != self.sub_category:
+                raise ValueError("")
 
         super().clean()
 

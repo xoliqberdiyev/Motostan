@@ -9,6 +9,7 @@ admin.site.register(models.DiscountedProduct)
 admin.site.register(models.ProductInfo)
 admin.site.register(models.ProductBrand, TranslationAdmin)
 admin.site.register(models.Colors)
+admin.site.register(models.Category)
 
 
 class InfoNameInline(admin.StackedInline):
@@ -29,11 +30,12 @@ class ProductAdmin(TranslationAdmin):
 @admin.register(models.TechnicalInfoName)
 class TechInfoAdmin(admin.ModelAdmin):
     inlines = [InfoNameInline]
-    
+
 
 class CategoryInline(TranslationStackedInline):
     model = models.ProductCategory
     extra = 0
+
     
 class SubCategory(TranslationStackedInline):
     model = models.SubCategory

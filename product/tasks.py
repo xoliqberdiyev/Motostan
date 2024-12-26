@@ -1,16 +1,14 @@
 from celery import shared_task
-
-from product.models import Product
-from product.utils import get_product_data
+from product import models
+from product import utils
 
 
 @shared_task
 def sync_product_data():
-    data = get_product_data()
-    # for product in data:
-    #     print(product)
-    for i in range(1,3):
-        print(data[:i])
-        i+=1
-
-
+    products = utils.get_product_data()
+    utils.create_or_update_category(products)
+    utils.create_or_update_sub_category(products)
+    utils.create_or_update_sub_sub_category(products)
+    utils.create_or_update_sub_sub_sub_category(products)
+    utils.create_or_update_products(products)
+    print('Product Category is added')
