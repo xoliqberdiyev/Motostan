@@ -1,4 +1,7 @@
 from django.contrib.postgres.search import SearchVector
+from django.db.models.expressions import Value
+from django.db.models.fields import CharField
+from django.db.models.functions.text import Concat
 from rest_framework import generics, status, views
 from rest_framework.response import Response
 
@@ -123,11 +126,25 @@ class SearchApiView(generics.GenericAPIView):
         serializer = serializers.SearchSerializer(data=request.data)
         serializer.is_valid()
         query =serializer.validated_data.get('search', '')
-        products = models.Product.objects.annotate(search=SearchVector('name')).filter(search=query)
-        main_category = models.MainCategory.objects.annotate(search=SearchVector('name')).filter(search=query)
-        sub_category = models.SubCategory.objects.annotate(search=SearchVector('name')).filter(search=query)
-        sub_sub_category = models.ProductCategory.objects.annotate(search=SearchVector('name')).filter(search=query)
-        category = models.Category.objects.annotate(search=SearchVector('name')).filter(search=query)
+        products = models.Product.objects.annotate(
+            search_field=Concat('name', Value(''), output_field=CharField())
+        ).filter(search_field__icontains=query)
+
+        main_category = models.MainCategory.objects.annotate(
+            search_field=Concat('name', Value(''), output_field=CharField())
+        ).filter(search_field__icontains=query)
+
+        sub_category = models.SubCategory.objects.annotate(
+            search_field=Concat('name', Value(''), output_field=CharField())
+        ).filter(search_field__icontains=query)
+
+        sub_sub_category = models.ProductCategory.objects.annotate(
+            search_field=Concat('name', Value(''), output_field=CharField())
+        ).filter(search_field__icontains=query)
+
+        category = models.Category.objects.annotate(
+            search_field=Concat('name', Value(''), output_field=CharField())
+        ).filter(search_field__icontains=query)
         return Response({
             'products': serializers.ProductsSerializer(products, many=True).data,
             'main_categories': serializers.MainCategorySearchSerializer(main_category, many=True).data,
