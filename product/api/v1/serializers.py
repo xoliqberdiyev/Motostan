@@ -233,3 +233,34 @@ class FilterCategoryIdSerializer(serializers.SerializerMethodField):
     sub_category_id = serializers.IntegerField(required=False)
     sub_sub_category_id = serializers.IntegerField(required=False)
     category_id = serializers.IntegerField(required=False)
+
+
+class SearchSerializer(serializers.Serializer):
+    search = serializers.CharField(required=True)
+
+
+
+class MainCategorySearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.MainCategory
+        fields = ['id', 'name']
+
+
+
+class SubCategorySearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SubCategory
+        fields = ['id', 'name']
+
+
+
+class ProductCategorySearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ProductCategory
+        fields = ['id', 'name']
+
+
+class CategorySearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Category
+        fields = ['id', 'name']

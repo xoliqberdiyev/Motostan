@@ -113,3 +113,24 @@ class CategoriesListApiView(views.APIView):
         categories = models.MainCategory.objects.all()
         serializer = serializers.CategoriesListSerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SearchApiView(generics.GenericAPIView):
+    serializer_class = serializers.SearchSerializer
+
+    def post(self, request):
+        serializer = serializers.SearchSerializer(data=request.data)
+        serializer.is_valid()
+        query =serializer.validated_data.get('search', '')
+        products = models.Product.objects.filter(name__icontains=query)
+        main_category = models.MainCategory.objects.filter(name=query)
+        sub_category = models.SubCategory.objects.filter(name=query)
+        sub_sub_category = models.ProductCategory.objects.filter(name=query)
+        category = models.Category.objects.filter(name=query)
+        return Response({
+            'products': serializers.ProductsSerializer(products, many=True).data,
+            'main_categories': serializers.MainCategorySearchSerializer(main_category, many=True).data,
+            'sub_categories': serializers.SubCategorySearchSerializer(sub_category, many=True).data,
+            'sub_sub_categories': serializers.ProductCategorySearchSerializer(sub_sub_category, many=True).data,
+            'categories': serializers.CategorySearchSerializer(category, many=True).data,
+        })
