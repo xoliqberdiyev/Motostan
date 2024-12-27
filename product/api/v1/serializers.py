@@ -114,7 +114,7 @@ class ProductTecInfoSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     category_name = serializers.SerializerMethodField(method_name='get_category_name')
     category_id = serializers.SerializerMethodField(method_name='get_category_id')
-    brand_name = serializers.SerializerMethodField(method='get_brand_name')
+    brand_name = serializers.SerializerMethodField(method_name='get_brand_name')
     brand_id = serializers.SerializerMethodField(method='get_brand_id')
     discount_price = serializers.SerializerMethodField(method_name='get_discount_price')
     medias = serializers.SerializerMethodField(method_name='get_medias')
