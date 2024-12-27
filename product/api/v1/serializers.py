@@ -112,10 +112,10 @@ class ProductTecInfoSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='category.name')
-    category_id = serializers.IntegerField(source='category.id')
-    brand_name = serializers.CharField(source='brand.name')
-    brand_id = serializers.IntegerField(source='brand.id')
+    category_name = serializers.SerializerMethodField(method_name='get_category_name')
+    category_id = serializers.SerializerMethodField(method_name='get_category_id')
+    brand_name = serializers.SerializerMethodField(method='get_brand_name')
+    brand_id = serializers.SerializerMethodField(method='get_brand_id')
     discount_price = serializers.SerializerMethodField(method_name='get_discount_price')
     medias = serializers.SerializerMethodField(method_name='get_medias')
     colors = serializers.SerializerMethodField(method_name='get_colors')
@@ -127,6 +127,18 @@ class ProductSerializer(serializers.ModelSerializer):
             'id', 'category_name', 'category_id', 'brand_name', 'brand_id', 'name', 'name', 'price', 'image',
             'discount_percentage', 'is_discount', 'discount_price', 'medias', 'colors', 'infos',
         ]
+
+    def get_category_name(self, obj):
+        return obj.category.name if obj.category else None
+
+    def get_category_id(self, obj):
+        return obj.category.id if obj.category else None
+
+    def get_brand_name(self, obj):
+        return obj.brand if obj.brand else None
+
+    def get_brand_id(self, obj):
+        return obj.brand.id if obj.brand else None
 
     def get_discount_price(self, obj):
         return (obj.price / 100) * obj.discount_percentage if obj.is_discount == True and obj.discount_percentage else 0
