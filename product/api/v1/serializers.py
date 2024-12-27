@@ -141,7 +141,7 @@ class ProductSerializer(serializers.ModelSerializer):
         return obj.brand.id if obj.brand else None
 
     def get_discount_price(self, obj):
-        return price - ((obj.price / 100) * obj.discount_percentage) if obj.is_discount == True and obj.discount_percentage else 0
+        return obj.price - ((obj.price / 100) * obj.discount_percentage) if obj.is_discount == True and obj.discount_percentage and obj.price > 0 else 0
 
     def get_colors(self, obj):
         return ColorsSerializer(obj.colors, many=True).data
