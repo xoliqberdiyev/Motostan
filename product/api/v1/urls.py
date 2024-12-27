@@ -6,7 +6,7 @@ from product.api.v1 import views
 urlpatterns = [
     path('discounted-products/', views.DiscountedProductApiView.as_view(), name='discounted-product'),
     path('top-products/', views.TopProductApiView.as_view(), name='top-product'),
-    path('categories/', views.ProductCategoryApiView.as_view(), name='product-categories'),
+    # path('categories/', views.ProductCategoryApiView.as_view(), name='product-categories'),
     path('brands/', views.ProductBrandApiView.as_view(), name='product-brands'),
     path('colors/', views.ProductColorApiView.as_view(), name='product-colors'),
     path('category/<int:category_id>/infos/', views.ProductInfoByCategoryApiView.as_view(), name='category-infos'),

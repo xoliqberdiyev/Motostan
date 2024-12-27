@@ -213,6 +213,8 @@ def create_or_update_sub_sub_sub_category(products):
 
 def create_or_update_products(products):
     for product in products:
+        if product.get('Наименование для печати') is None:
+            product['Наименование для печати'] = 'Something'
         main_category = product.get("Родитель4")
         sub_category = product.get("Родитель3")
         category = product.get("Родитель2")

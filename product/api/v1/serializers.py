@@ -19,26 +19,38 @@ class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Product
         fields = [
-            'id', 'image', 'name_uz', 'name_ru', 'price', 'discount_percentage', 'discounted_price'
+            'id', 'image', 'name', 'name', 'price', 'discount_percentage', 'discounted_price'
         ]
 
     def get_discounted_price(self, obj):
         return (obj.price / 100) * obj.discount_percentage if obj.is_discount == True and obj.discount_percentage else 0
 
 
+class CategorySubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Category
+        fields = ['id', 'name',]
+
+
 class ProductCategorySerializer(serializers.ModelSerializer):
+    sub_category = serializers.SerializerMethodField(method_name='get_sub_category')
+
     class Meta:
         model = models.ProductCategory
         fields = [
-            'id', 'name_uz', 'name_ru'
+            'id', 'name', 'name', 'sub_category',
         ]
+
+    def get_sub_category(self, obj):
+        categories = models.Category.objects.filter(product_category=obj)
+        return CategorySubCategorySerializer(categories, many=True).data
 
 
 class ProductBrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductBrand
         fields = [
-            'id', 'name_uz', 'name_ru'
+            'id', 'name', 'name'
         ]
 
 
@@ -112,7 +124,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Product
         fields = [
-            'id', 'category_name', 'category_id', 'brand_name', 'brand_id', 'name_uz', 'name_ru', 'price', 'image',
+            'id', 'category_name', 'category_id', 'brand_name', 'brand_id', 'name', 'name', 'price', 'image',
             'discount_percentage', 'is_discount', 'discount_price', 'medias', 'colors', 'infos',
         ]
 
@@ -135,7 +147,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ProductCategory
-        fields = ['id', 'name_uz', 'name_ru', 'products']
+        fields = ['id', 'name', 'name', 'products']
 
     def get_products(self, obj):
         products = models.Product.objects.filter(category=obj)
@@ -149,7 +161,7 @@ class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SubCategory
         fields = [
-            'id', 'name_uz', 'name_ru', 'products', 'categories'
+            'id', 'name', 'name', 'products', 'categories'
         ]
 
     def get_products(self, obj):
@@ -168,7 +180,7 @@ class MainCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MainCategory
         fields = [
-            'id', 'name_uz', 'name_ru', 'categories', 'products'
+            'id', 'name', 'name', 'categories', 'products'
         ]
 
     def get_categories(self, obj):
@@ -185,7 +197,7 @@ class SubCategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.SubCategory
-        fields = ['id', 'name_uz', 'name_ru', 'categories']
+        fields = ['id', 'name', 'name', 'categories']
 
     def get_categories(self, obj):
         categories = models.ProductCategory.objects.filter(sub_category=obj)
@@ -197,8 +209,15 @@ class CategoriesListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.MainCategory
-        fields = ['id', 'name_uz', 'name_ru', 'sub_categories']
+        fields = ['id', 'name', 'name', 'sub_categories']
 
     def get_sub_categories(self, obj):
         sub_categories = models.SubCategory.objects.filter(main_category=obj)
         return SubCategoryListSerializer(sub_categories, many=True).data
+
+
+class FilterCategoryIdSerializer(serializers.SerializerMethodField):
+    main_category_id = serializers.IntegerField(required=False)
+    sub_category_id = serializers.IntegerField(required=False)
+    sub_sub_category_id = serializers.IntegerField(required=False)
+    category_id = serializers.IntegerField(required=False)

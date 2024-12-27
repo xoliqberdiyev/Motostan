@@ -172,7 +172,7 @@ LANGUAGES = (
     ('uz', 'Uzbek'),
     ('ru', 'Russia')
 )
-DEFAULT_MODELTRANSLATION_LANGUAGE = 'uz'
+DEFAULT_MODELTRANSLATION_LANGUAGE = 'ru'
 
 
 # django-jazzmin config

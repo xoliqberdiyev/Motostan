@@ -33,17 +33,6 @@ class TopProductApiView(views.APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ProductCategoryApiView(views.APIView):
-    """
-    Bu apida kategoriyalarni listni olishingiz mumkin,
-    apidan keladigan response: id, name_uz, name_ru
-    """
-    def get(self, request):
-        categories = models.ProductCategory.objects.all()
-        serializer = serializers.ProductCategorySerializer(categories, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 class ProductBrandApiView(views.APIView):
     """
     Bu apida brandlar listini olishingiz mumkin,
@@ -91,14 +80,10 @@ class ProductInfoByCategoryApiView(views.APIView):
 
 
 class ProductByCategoryApiView(generics.ListAPIView):
-    """
-    Bu api orqali siz malumot bir categoryga tegishli productlarni olishingiz mumkin category_id orqali,
-    Bu apida yana bir necha filterlar bor: brand=1,2,3 , color=1,2,3 , info=1,2,3 , min_price=100 , max_price=10000 , is_discount=True or False
-    """
     filter_backends = [DjangoFilterBackend]
     filterset_class = filters.ProductFilter
     pagination_class = pagination.CustomPagination
-    serializer_class = serializers.ProductsSerializer
+    serializer_class = serializers.FilterCategoryIdSerializer
 
 
     def get_queryset(self):

@@ -29,7 +29,7 @@ class MainCategory(BaseModel):
 
 class SubCategory(BaseModel):
     name = models.CharField(max_length=250)
-    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name="sub_categories")
+    main_category = models.ForeignKey(MainCategory, on_delete=models.SET_NULL, null=True, related_name="sub_categories")
 
     def __str__(self):
         return self.name
@@ -41,7 +41,7 @@ class SubCategory(BaseModel):
 
 class ProductCategory(BaseModel):
     name = models.CharField(max_length=250)
-    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="product_categories")
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, related_name="product_categories")
 
     def __str__(self) -> models.CharField:
         return self.name
@@ -53,7 +53,7 @@ class ProductCategory(BaseModel):
 
 class Category(BaseModel):
     name = models.CharField(max_length=250)
-    product_category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name="categories")
+    product_category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, related_name="categories")
 
     def __str__(self) -> models.CharField:
         return self.name

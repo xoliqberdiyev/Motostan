@@ -7,7 +7,7 @@ from product import models
 
 admin.site.register(models.DiscountedProduct)
 admin.site.register(models.ProductInfo)
-admin.site.register(models.ProductBrand, TranslationAdmin)
+admin.site.register(models.ProductBrand)
 admin.site.register(models.Colors)
 admin.site.register(models.Category)
 
@@ -23,8 +23,9 @@ class MediaInline(admin.StackedInline):
 
 
 @admin.register(models.Product)
-class ProductAdmin(TranslationAdmin):
+class ProductAdmin(admin.ModelAdmin):
     inlines = [MediaInline]
+    search_fields = ['name']
 
 
 @admin.register(models.TechnicalInfoName)
@@ -32,12 +33,12 @@ class TechInfoAdmin(admin.ModelAdmin):
     inlines = [InfoNameInline]
 
 
-class CategoryInline(TranslationStackedInline):
+class CategoryInline(admin.StackedInline):
     model = models.ProductCategory
     extra = 0
 
     
-class SubCategory(TranslationStackedInline):
+class SubCategory(admin.StackedInline):
     model = models.SubCategory
     extra = 0
     fields = ['link', 'name']
@@ -50,10 +51,10 @@ class SubCategory(TranslationStackedInline):
     
 
 @admin.register(models.SubCategory)
-class SubCategoryAdmin(TranslationAdmin):
+class SubCategoryAdmin(admin.ModelAdmin):
     inlines = [CategoryInline]
 
     
 @admin.register(models.MainCategory)
-class MainCategoryAdmin(TranslationAdmin):
+class MainCategoryAdmin(admin.ModelAdmin):
     inlines =  [SubCategory]
