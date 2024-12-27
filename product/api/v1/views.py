@@ -1,3 +1,4 @@
+from django.contrib.postgres.search import SearchVector
 from rest_framework import generics, status, views
 from rest_framework.response import Response
 
@@ -122,11 +123,11 @@ class SearchApiView(generics.GenericAPIView):
         serializer = serializers.SearchSerializer(data=request.data)
         serializer.is_valid()
         query =serializer.validated_data.get('search', '')
-        products = models.Product.objects.filter(name__icontains=query)
-        main_category = models.MainCategory.objects.filter(name=query)
-        sub_category = models.SubCategory.objects.filter(name=query)
-        sub_sub_category = models.ProductCategory.objects.filter(name=query)
-        category = models.Category.objects.filter(name=query)
+        products = models.Product.objects.annotate(search=SearchVector('name')).filter(search=query)
+        main_category = models.MainCategory.objects.annotate(search=SearchVector('name')).filter(search=query)
+        sub_category = models.SubCategory.objects.annotate(search=SearchVector('name')).filter(search=query)
+        sub_sub_category = models.ProductCategory.objects.annotate(search=SearchVector('name')).filter(search=query)
+        category = models.Category.objects.annotate(search=SearchVector('name')).filter(search=query)
         return Response({
             'products': serializers.ProductsSerializer(products, many=True).data,
             'main_categories': serializers.MainCategorySearchSerializer(main_category, many=True).data,
