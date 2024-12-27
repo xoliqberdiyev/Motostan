@@ -83,7 +83,7 @@ class ProductByCategoryApiView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend]
     filterset_class = filters.ProductFilter
     pagination_class = pagination.CustomPagination
-    serializer_class = serializers.FilterCategoryIdSerializer
+    serializer_class = serializers.ProductsSerializer
 
 
     def get_queryset(self):
