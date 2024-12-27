@@ -128,23 +128,23 @@ class SearchApiView(generics.GenericAPIView):
         query =serializer.validated_data.get('search', '')
         products = models.Product.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)
+        ).filter(search_field__icontains=query)[:10]
 
         main_category = models.MainCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)
+        ).filter(search_field__icontains=query)[:10]
 
         sub_category = models.SubCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)
+        ).filter(search_field__icontains=query)[:10]
 
         sub_sub_category = models.ProductCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)
+        ).filter(search_field__icontains=query)[:10]
 
         category = models.Category.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)
+        ).filter(search_field__icontains=query)[:10]
         return Response({
             'products': serializers.ProductsSerializer(products, many=True).data,
             'main_categories': serializers.MainCategorySearchSerializer(main_category, many=True).data,
