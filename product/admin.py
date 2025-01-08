@@ -10,6 +10,7 @@ admin.site.register(models.ProductInfo)
 admin.site.register(models.ProductBrand)
 admin.site.register(models.Colors)
 admin.site.register(models.Category)
+admin.site.register(models.ProductCategory)
 
 
 class InfoNameInline(admin.StackedInline):
