@@ -94,6 +94,41 @@ class ProductByCategoryApiView(generics.ListAPIView):
         products = models.Product.objects.filter(category__id=self.kwargs.get('category_id'))
         return products
 
+class MainProductByCategoryApiView(generics.ListAPIView):
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = filters.ProductFilter
+    pagination_class = pagination.CustomPagination
+    serializer_class = serializers.ProductsSerializer
+
+
+    def get_queryset(self):
+        products = models.Product.objects.filter(main_category__id=self.kwargs.get('category_id'))
+        return products
+
+
+class SubProductByCategoryApiView(generics.ListAPIView):
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = filters.ProductFilter
+    pagination_class = pagination.CustomPagination
+    serializer_class = serializers.ProductsSerializer
+
+
+    def get_queryset(self):
+        products = models.Product.objects.filter(sub_category__id=self.kwargs.get('category_id'))
+        return products
+
+
+class SubSubProductByCategoryApiView(generics.ListAPIView):
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = filters.ProductFilter
+    pagination_class = pagination.CustomPagination
+    serializer_class = serializers.ProductsSerializer
+
+
+    def get_queryset(self):
+        products = models.Product.objects.filter(category_sub_category__id=self.kwargs.get('category_id'))
+        return products
+
 
 class ProductDetailApiView(views.APIView):
     def get(self, request, id):
