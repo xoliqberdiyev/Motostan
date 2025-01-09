@@ -9,8 +9,6 @@ admin.site.register(models.DiscountedProduct)
 admin.site.register(models.ProductInfo)
 admin.site.register(models.ProductBrand)
 admin.site.register(models.Colors)
-admin.site.register(models.Category)
-admin.site.register(models.ProductCategory)
 
 
 class InfoNameInline(admin.StackedInline):
@@ -54,8 +52,18 @@ class SubCategory(admin.StackedInline):
 @admin.register(models.SubCategory)
 class SubCategoryAdmin(admin.ModelAdmin):
     inlines = [CategoryInline]
+    list_display = ["id", "name"]
 
     
 @admin.register(models.MainCategory)
 class MainCategoryAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]
     inlines =  [SubCategory]
+
+@admin.register(models.ProductCategory)
+class MainCategoryAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]
+
+@admin.register(models.Category)
+class MainCategoryAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]

@@ -31,7 +31,7 @@ class CategorySubCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Category
-        fields = ['id', 'name', 'category_number']
+        fields = ['id', 'name', "image", 'category_number']
 
     def get_category_number(self, obj):
         return 4
@@ -43,7 +43,7 @@ class ProductCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductCategory
         fields = [
-            'id', 'name','category_number', 'sub_category',
+            'id', 'name','category_number', "image",'sub_category',
         ]
 
     def get_sub_category(self, obj):
@@ -200,7 +200,7 @@ class MainCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MainCategory
         fields = [
-            'id', 'name', 'categories', 'products', "category_number",
+            'id', 'name', 'categories', 'products',
         ]
 
     def get_categories(self, obj):
@@ -218,7 +218,7 @@ class SubCategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.SubCategory
-        fields = ['id', 'name','category_number', 'categories', ]
+        fields = ['id', 'name','category_number', 'categories', "image"]
 
     def get_categories(self, obj):
         categories = models.ProductCategory.objects.filter(sub_category=obj)
@@ -233,7 +233,7 @@ class CategoriesListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.MainCategory
-        fields = ['id', 'name','category_number', 'sub_categories', ]
+        fields = ['id', 'name','category_number', 'sub_categories', "image"]
 
     def get_sub_categories(self, obj):
         sub_categories = models.SubCategory.objects.filter(main_category=obj)

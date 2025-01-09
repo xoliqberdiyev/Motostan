@@ -8,7 +8,7 @@ from common.models import BaseModel
 class ProductBrand(BaseModel):
     name = models.CharField(max_length=250)
 
-    def __str__(self) -> models.CharField:
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -18,9 +18,10 @@ class ProductBrand(BaseModel):
 
 class MainCategory(BaseModel):
     name = models.CharField(max_length=250, null=True, blank=True)
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
     
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
     
     class Meta:
         verbose_name = _("main category")
@@ -30,10 +31,8 @@ class MainCategory(BaseModel):
 class SubCategory(BaseModel):
     name = models.CharField(max_length=250,null=True, blank=True)
     main_category = models.ForeignKey(MainCategory, on_delete=models.SET_NULL, null=True, related_name="sub_categories")
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
 
-    def __str__(self):
-        return self.name
-    
     class Meta:
         verbose_name = _("sub category")
         verbose_name_plural = _("sub categories")
@@ -42,9 +41,10 @@ class SubCategory(BaseModel):
 class ProductCategory(BaseModel):
     name = models.CharField(max_length=250,null=True, blank=True)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, related_name="product_categories")
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
 
-    def __str__(self) -> models.CharField:
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
     class Meta:
         verbose_name = _('product category')
@@ -54,9 +54,10 @@ class ProductCategory(BaseModel):
 class Category(BaseModel):
     name = models.CharField(max_length=250,null=True, blank=True)
     product_category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, related_name="categories")
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
 
-    def __str__(self) -> models.CharField:
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
     class Meta:
         verbose_name = _("category")
