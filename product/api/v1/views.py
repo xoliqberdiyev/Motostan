@@ -180,10 +180,14 @@ class SearchApiView(generics.GenericAPIView):
         category = models.Category.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
         ).filter(search_field__icontains=query)[:10]
+        item = models.Product.objects.annotate(
+            search_field=Concat('item', Value(''), output_field=CharField())
+        ).filter(search_field__icontains=query)[:10]
         return Response({
             'products': serializers.ProductsSerializer(products, many=True).data,
             'main_categories': serializers.MainCategorySearchSerializer(main_category, many=True).data,
             'sub_categories': serializers.SubCategorySearchSerializer(sub_category, many=True).data,
             'sub_sub_categories': serializers.ProductCategorySearchSerializer(sub_sub_category, many=True).data,
             'categories': serializers.CategorySearchSerializer(category, many=True).data,
+            "item": serializers.ProductsSerializer(item, many=True).data,
         })
