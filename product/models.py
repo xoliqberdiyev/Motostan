@@ -137,7 +137,7 @@ class Product(BaseModel):
     infos = models.ManyToManyField(ProductInfo, blank=True, related_name='products')
 
     def __str__(self):
-        return self.name
+        return f"{self.id} - {self.name}"
 
     class Meta:
         verbose_name = _('product')
@@ -167,12 +167,11 @@ class ProductMedia(BaseModel):
 
 
 class DiscountedProduct(BaseModel):
-    image_uz = models.ImageField(upload_to='discounted-product/image_uz')
     image_ru = models.ImageField(upload_to='discounted-product/image_ru')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='discounted_products')
 
     def __str__(self):
-        return f'{self.product}'
+        return f'{self.product} - {self.image_ru}'
 
     class Meta:
         verbose_name = _("discounted product")

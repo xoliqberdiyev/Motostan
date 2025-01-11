@@ -19,7 +19,7 @@ class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Product
         fields = [
-            'id', 'image', 'name', 'name', 'price', 'discount_percentage', 'discounted_price'
+            'id', 'image', 'name', 'name', 'price', 'discount_percentage', 'discounted_price', 'item'
         ]
 
     def get_discounted_price(self, obj):
