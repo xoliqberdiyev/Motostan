@@ -32,7 +32,7 @@ class TopProductApiView(views.APIView):
     apidan keladigan response: id, image, name_uz, name_ru, price, discount_percentage, discounted_price
     """
     def get(self, request):
-        products = models.Product.objects.filter(is_top=True)[:5]
+        products = models.Product.objects.filter(is_top=True, image__isnull=False)[:5]
         serializer = serializers.ProductsSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -91,7 +91,7 @@ class ProductByCategoryApiView(generics.ListAPIView):
 
 
     def get_queryset(self):
-        products = models.Product.objects.filter(category__id=self.kwargs.get('category_id'))
+        products = models.Product.objects.filter(category__id=self.kwargs.get('category_id'), image__isnull=False)
         return products
 
 class MainProductByCategoryApiView(generics.ListAPIView):
@@ -102,7 +102,7 @@ class MainProductByCategoryApiView(generics.ListAPIView):
 
 
     def get_queryset(self):
-        products = models.Product.objects.filter(main_category__id=self.kwargs.get('category_id'))
+        products = models.Product.objects.filter(main_category__id=self.kwargs.get('category_id'), image__isnull=False)
         return products
 
 
@@ -114,7 +114,7 @@ class SubProductByCategoryApiView(generics.ListAPIView):
 
 
     def get_queryset(self):
-        products = models.Product.objects.filter(sub_category__id=self.kwargs.get('category_id'))
+        products = models.Product.objects.filter(sub_category__id=self.kwargs.get('category_id'), image__isnull=False)
         return products
 
 
@@ -126,7 +126,7 @@ class SubSubProductByCategoryApiView(generics.ListAPIView):
 
 
     def get_queryset(self):
-        products = models.Product.objects.filter(category_sub_category__id=self.kwargs.get('category_id'))
+        products = models.Product.objects.filter(category_sub_category__id=self.kwargs.get('category_id'), image__isnull=False)
         return products
 
 
