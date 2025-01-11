@@ -25,7 +25,7 @@ class MediaInline(admin.StackedInline):
 class ProductAdmin(admin.ModelAdmin):
     inlines = [MediaInline]
     search_fields = ['name']
-    list_display = ["id", "name", 'image']
+    list_display = ["id", "item", 'image']
 
 
 @admin.register(models.TechnicalInfoName)
