@@ -102,7 +102,7 @@ class MainProductByCategoryApiView(generics.ListAPIView):
 
 
     def get_queryset(self):
-        products = models.Product.objects.filter(main_category__id=self.kwargs.get('category_id'), image__isnull=False)
+        products = models.Product.objects.filter(main_category__id=self.kwargs.get('category_id')).exclude(image='')
         return products
 
 
@@ -114,7 +114,7 @@ class SubProductByCategoryApiView(generics.ListAPIView):
 
 
     def get_queryset(self):
-        products = models.Product.objects.filter(sub_category__id=self.kwargs.get('category_id'), image__isnull=False)
+        products = models.Product.objects.filter(sub_category__id=self.kwargs.get('category_id')).exclude(image='')
         return products
 
 
@@ -126,7 +126,7 @@ class SubSubProductByCategoryApiView(generics.ListAPIView):
 
 
     def get_queryset(self):
-        products = models.Product.objects.filter(category_sub_category__id=self.kwargs.get('category_id'), image__isnull=False)
+        products = models.Product.objects.filter(category_sub_category__id=self.kwargs.get('category_id')).exclude(image='')
         return products
 
 
@@ -163,7 +163,7 @@ class SearchApiView(generics.GenericAPIView):
         query =serializer.validated_data.get('search', '')
         products = models.Product.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:10]
+        ).filter(search_field__icontains=query)[:10].exclude(image='')
 
         main_category = models.MainCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
@@ -182,7 +182,7 @@ class SearchApiView(generics.GenericAPIView):
         ).filter(search_field__icontains=query)[:10]
         item = models.Product.objects.annotate(
             search_field=Concat('item', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:10]
+        ).filter(search_field__icontains=query)[:10].exclude(image='')
         return Response({
             'products': serializers.ProductsSerializer(products, many=True).data,
             'main_categories': serializers.MainCategorySearchSerializer(main_category, many=True).data,

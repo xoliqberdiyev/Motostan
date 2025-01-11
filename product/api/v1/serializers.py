@@ -208,7 +208,7 @@ class MainCategorySerializer(serializers.ModelSerializer):
         return SubCategorySerializer(categories, many=True).data
 
     def get_products(self, obj):
-        products = models.Product.objects.filter(main_category=obj)
+        products = models.Product.objects.filter(main_category=obj).exclude(image='')
         return ProductsSerializer(products, many=True).data
 
 
