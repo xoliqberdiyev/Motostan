@@ -132,7 +132,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = models.Product
         fields = [
             'id', 'category_name', 'category_id', 'brand_name', 'brand_id', 'name', 'name', 'price', 'image',
-            'discount_percentage', 'is_discount', 'discount_price', 'medias', 'colors', 'infos',
+            'discount_percentage', 'is_discount', 'discount_price', 'medias', 'colors', 'infos', 'item'
         ]
 
     def get_category_name(self, obj):
