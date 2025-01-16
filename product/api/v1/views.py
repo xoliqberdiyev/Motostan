@@ -162,7 +162,7 @@ class SearchApiView(generics.GenericAPIView):
         query =serializer.validated_data.get('search', '')
         products = models.Product.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:5].exclude(image='')
+        ).filter(search_field__icontains=query).exclude(image='')
 
         main_category = models.MainCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
