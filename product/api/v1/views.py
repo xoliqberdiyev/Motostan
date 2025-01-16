@@ -162,26 +162,26 @@ class SearchApiView(generics.GenericAPIView):
         query =serializer.validated_data.get('search', '')
         products = models.Product.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:10].exclude(image='')
+        ).filter(search_field__icontains=query)[:5].exclude(image='')
 
         main_category = models.MainCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:10]
+        ).filter(search_field__icontains=query)[:5]
 
         sub_category = models.SubCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:10]
+        ).filter(search_field__icontains=query)[:5]
 
         sub_sub_category = models.ProductCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:10]
+        ).filter(search_field__icontains=query)[:5]
 
         category = models.Category.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:10]
+        ).filter(search_field__icontains=query)[:5]
         item = models.Product.objects.annotate(
             search_field=Concat('item', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:10].exclude(image='')
+        ).filter(search_field__icontains=query)[:5].exclude(image='')
         return Response({
             'products': serializers.ProductsSerializer(products, many=True).data,
             'main_categories': serializers.MainCategorySearchSerializer(main_category, many=True).data,
