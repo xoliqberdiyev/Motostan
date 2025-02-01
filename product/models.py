@@ -17,7 +17,7 @@ class ProductBrand(BaseModel):
 
 
 class MainCategory(BaseModel):
-    name = models.CharField(max_length=250, null=True, blank=True)
+    name = models.CharField(max_length=250, unique=True)
     image = models.ImageField(upload_to='products/', null=True, blank=True)
     
     # def __str__(self):
@@ -29,7 +29,7 @@ class MainCategory(BaseModel):
     
 
 class SubCategory(BaseModel):
-    name = models.CharField(max_length=250,null=True, blank=True)
+    name = models.CharField(max_length=250, unique=True)
     main_category = models.ForeignKey(MainCategory, on_delete=models.SET_NULL, null=True, related_name="sub_categories")
     image = models.ImageField(upload_to='products/', null=True, blank=True)
 
@@ -39,7 +39,7 @@ class SubCategory(BaseModel):
 
 
 class ProductCategory(BaseModel):
-    name = models.CharField(max_length=250,null=True, blank=True)
+    name = models.CharField(max_length=250, unique=True)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, related_name="product_categories")
     image = models.ImageField(upload_to='products/', null=True, blank=True)
 
@@ -52,7 +52,7 @@ class ProductCategory(BaseModel):
 
 
 class Category(BaseModel):
-    name = models.CharField(max_length=250,null=True, blank=True)
+    name = models.CharField(max_length=250, unique=True)
     product_category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, related_name="categories")
     image = models.ImageField(upload_to='products/', null=True, blank=True)
 
@@ -127,12 +127,12 @@ class Product(BaseModel):
 
     is_discount = models.BooleanField(default=False)
     is_top = models.BooleanField(default=False)
-    brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    brand = models.ForeignKey(ProductBrand, on_delete=models.SET_NULL, related_name='products', null=True, blank=True)
 
-    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
-    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
-    category_sub_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product_sub_categories', null=True, blank=True)
+    main_category = models.ForeignKey(MainCategory, on_delete=models.SET_NULL, related_name='products', null=True, blank=True)
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, related_name='products', null=True, blank=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, related_name='products', null=True, blank=True)
+    category_sub_category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='product_sub_categories', null=True, blank=True)
 
     colors = models.ManyToManyField(Colors, blank=True, related_name='products')
     infos = models.ManyToManyField(ProductInfo, blank=True, related_name='products')
