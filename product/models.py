@@ -116,6 +116,7 @@ class Product(BaseModel):
     description = models.TextField(blank=True, null=True)
     quantity_left = models.CharField(blank=True, null=True, max_length=250)
     price = models.PositiveBigIntegerField(default=0)
+    price_type = models.CharField(max_length=250, null=True, blank=True)
     name = models.CharField(max_length=250,null=True, blank=True)
     item = models.CharField(max_length=250, null=True, blank=True)
 

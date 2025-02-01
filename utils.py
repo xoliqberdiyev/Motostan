@@ -1,3 +1,10 @@
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+
+django.setup()
+
 import requests
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -7,7 +14,6 @@ from django.db import transaction
 
 
 r = requests.get('https://dicloud.uz:38871/hayat_moto/hs/products1/get_products',auth=('Administrator','Odilsoft!'))
-
 def get_product_data():
     if r.status_code == 200:
         raw_text = r.text.strip().split(';')  # Split by semicolon to separate products
@@ -81,21 +87,19 @@ def fill_data_to_database(data):
             item=product.get('Артикул'),
             quantity_left=product.get('Количество на складе') if product.get('Количество на складе') else 0,
             description=product.get('Описание') if product.get('Описание') else '',
+            price_type=product.get('Вид цены') if product.get('Вид цены') else None,
             defaults={'price': price}
         )
         from django.db.models import Count
 
 
 
-
-# Find duplicates by grouping on fields you consider should be unique
         duplicates = (
             models.Product.objects.values('name', 'category', 'main_category', 'sub_category', 'category_sub_category')
             .annotate(count=Count('id'))
             .filter(count__gt=1)
         )
 
-        # Delete all duplicates except one
         for duplicate in duplicates:
             products = models.Product.objects.filter(
                 name=duplicate['name'],
@@ -110,28 +114,6 @@ def fill_data_to_database(data):
         created_products.append(product)
 
     return created_products
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # def create_or_update_category(products):
