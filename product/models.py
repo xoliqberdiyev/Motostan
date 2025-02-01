@@ -17,7 +17,7 @@ class ProductBrand(BaseModel):
 
 
 class MainCategory(BaseModel):
-    name = models.CharField(max_length=250, unique=True)
+    name = models.CharField(max_length=250)
     image = models.ImageField(upload_to='products/', null=True, blank=True)
     
     # def __str__(self):
@@ -29,7 +29,7 @@ class MainCategory(BaseModel):
     
 
 class SubCategory(BaseModel):
-    name = models.CharField(max_length=250, unique=True)
+    name = models.CharField(max_length=250)
     main_category = models.ForeignKey(MainCategory, on_delete=models.SET_NULL, null=True, related_name="sub_categories")
     image = models.ImageField(upload_to='products/', null=True, blank=True)
 
@@ -39,7 +39,7 @@ class SubCategory(BaseModel):
 
 
 class ProductCategory(BaseModel):
-    name = models.CharField(max_length=250, unique=True)
+    name = models.CharField(max_length=250)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, related_name="product_categories")
     image = models.ImageField(upload_to='products/', null=True, blank=True)
 
@@ -52,7 +52,7 @@ class ProductCategory(BaseModel):
 
 
 class Category(BaseModel):
-    name = models.CharField(max_length=250, unique=True)
+    name = models.CharField(max_length=250)
     product_category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, related_name="categories")
     image = models.ImageField(upload_to='products/', null=True, blank=True)
 
