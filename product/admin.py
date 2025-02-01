@@ -5,32 +5,32 @@ from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
 from product import models
 
-admin.site.register(models.DiscountedProduct)
-admin.site.register(models.ProductInfo)
-admin.site.register(models.ProductBrand)
-admin.site.register(models.Colors)
+# admin.site.register(models.DiscountedProduct)
+# admin.site.register(models.ProductInfo)
+# admin.site.register(models.ProductBrand)
+# admin.site.register(models.Colors)
 
 
-class InfoNameInline(admin.StackedInline):
-    model = models.InfoName
-    extra = 0
+# class InfoNameInline(admin.StackedInline):
+#     model = models.InfoName
+#     extra = 0
 
 
-class MediaInline(admin.StackedInline):
-    model = models.ProductMedia
-    extra = 0
+# class MediaInline(admin.StackedInline):
+#     model = models.ProductMedia
+#     extra = 0
 
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [MediaInline]
+    # inlines = [MediaInline]
     search_fields = ['name']
     list_display = ["name","item", 'image']
 
 
-@admin.register(models.TechnicalInfoName)
-class TechInfoAdmin(admin.ModelAdmin):
-    inlines = [InfoNameInline]
+# @admin.register(models.TechnicalInfoName)
+# class TechInfoAdmin(admin.ModelAdmin):
+#     inlines = [InfoNameInline]
 
 
 class CategoryInline(admin.StackedInline):

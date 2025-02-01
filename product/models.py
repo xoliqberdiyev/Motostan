@@ -20,8 +20,8 @@ class MainCategory(BaseModel):
     name = models.CharField(max_length=250, null=True, blank=True)
     image = models.ImageField(upload_to='products/', null=True, blank=True)
     
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
     
     class Meta:
         verbose_name = _("main category")
@@ -43,8 +43,8 @@ class ProductCategory(BaseModel):
     sub_category = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, related_name="product_categories")
     image = models.ImageField(upload_to='products/', null=True, blank=True)
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _('product category')
@@ -56,8 +56,8 @@ class Category(BaseModel):
     product_category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, related_name="categories")
     image = models.ImageField(upload_to='products/', null=True, blank=True)
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _("category")
@@ -117,7 +117,7 @@ class Product(BaseModel):
     quantity_left = models.CharField(blank=True, null=True, max_length=250)
     price = models.PositiveBigIntegerField(default=0)
     price_type = models.CharField(max_length=250, null=True, blank=True)
-    name = models.CharField(max_length=250,null=True, blank=True)
+    name = models.CharField(max_length=250, unique=True)
     item = models.CharField(max_length=250, null=True, blank=True)
 
     image = models.ImageField(upload_to='product/images/', null=True, blank=True)
