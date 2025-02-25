@@ -82,7 +82,7 @@ class MainCategoryApiView(views.APIView):
 
 class CategoriesListApiView(views.APIView):
     def get(self, request):
-        categories = models.MainCategory.objects.all().distinct()
+        categories = models.MainCategory.objects.order_by('created_at').distinct()
         serializer = serializers.CategoriesListSerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
