@@ -25,7 +25,7 @@ class ProductByCategoryApiView(generics.ListAPIView):
     serializer_class = serializers.ProductsSerializer
 
     def get_queryset(self):
-        products = models.Product.objects.filter(category__id=self.kwargs.get('category_id')).exclude(image='')
+        products = models.Product.objects.filter(category__id=self.kwargs.get('category_id'))
         return products
 
 class ProductByFifthCategoryApiView(generics.ListAPIView):
@@ -33,7 +33,7 @@ class ProductByFifthCategoryApiView(generics.ListAPIView):
     serializer_class = serializers.ProductsSerializer
 
     def get_queryset(self):
-        products = models.Product.objects.filter(fifth_category__id=self.kwargs.get('category_id')).exclude(image='')
+        products = models.Product.objects.filter(fifth_category__id=self.kwargs.get('category_id'))
         return products
 
 class MainProductByCategoryApiView(generics.ListAPIView):
@@ -41,7 +41,7 @@ class MainProductByCategoryApiView(generics.ListAPIView):
     serializer_class = serializers.ProductsSerializer
 
     def get_queryset(self):
-        products = models.Product.objects.filter(main_category__id=self.kwargs.get('category_id')).exclude(image='')
+        products = models.Product.objects.filter(main_category__id=self.kwargs.get('category_id'))
         return products
 
 
@@ -50,7 +50,7 @@ class SubProductByCategoryApiView(generics.ListAPIView):
     serializer_class = serializers.ProductsSerializer
 
     def get_queryset(self):
-        products = models.Product.objects.filter(sub_category__id=self.kwargs.get('category_id')).exclude(image='')
+        products = models.Product.objects.filter(sub_category__id=self.kwargs.get('category_id'))
         return products
 
 
@@ -59,7 +59,7 @@ class SubSubProductByCategoryApiView(generics.ListAPIView):
     serializer_class = serializers.ProductsSerializer
 
     def get_queryset(self):
-        products = models.Product.objects.filter(category_sub_category__id=self.kwargs.get('category_id')).exclude(image='')
+        products = models.Product.objects.filter(category_sub_category__id=self.kwargs.get('category_id'))
         return products
 
 
@@ -120,7 +120,7 @@ class SearchApiView(generics.GenericAPIView):
 
         item = models.Product.objects.annotate(
             search_field=Concat('item', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query).exclude(image='')
+        ).filter(search_field__icontains=query)
 
         return Response({
             'products': serializers.ProductsSerializer(products, many=True).data,
