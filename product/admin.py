@@ -5,32 +5,12 @@ from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
 from product import models
 
-# admin.site.register(models.DiscountedProduct)
-# admin.site.register(models.ProductInfo)
-# admin.site.register(models.ProductBrand)
-# admin.site.register(models.Colors)
-
-
-# class InfoNameInline(admin.StackedInline):
-#     model = models.InfoName
-#     extra = 0
-
-
-# class MediaInline(admin.StackedInline):
-#     model = models.ProductMedia
-#     extra = 0
-
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    # inlines = [MediaInline]
     search_fields = ['name']
     list_display = ["name","item", 'image']
-
-
-# @admin.register(models.TechnicalInfoName)
-# class TechInfoAdmin(admin.ModelAdmin):
-#     inlines = [InfoNameInline]
+    list_filter = ['main_category']
 
 
 class CategoryInline(admin.StackedInline):
@@ -53,7 +33,8 @@ class SubCategory(admin.StackedInline):
 @admin.register(models.SubCategory)
 class SubCategoryAdmin(admin.ModelAdmin):
     inlines = [CategoryInline]
-    list_display = ["id", "name"]
+    list_display = ["id", "name", 'main_category']
+    list_filter = ['main_category']
 
     
 @admin.register(models.MainCategory)
@@ -68,3 +49,11 @@ class MainCategoryAdmin(admin.ModelAdmin):
 @admin.register(models.Category)
 class MainCategoryAdmin(admin.ModelAdmin):
     list_display = ["id", "name"]
+
+@admin.register(models.FifthCategroy)
+class FifthCategoryAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.ProductInfo)
+class ProductInfoAdmin(admin.ModelAdmin):
+    pass

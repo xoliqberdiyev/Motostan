@@ -14,27 +14,38 @@ class DiscountedProductSerializer(serializers.ModelSerializer):
 
 
 class ProductsSerializer(serializers.ModelSerializer):
-    discounted_price = serializers.SerializerMethodField(method_name='get_discounted_price')
-
     class Meta:
         model = models.Product
         fields = [
-            'id', 'image', 'name', 'name', 'price', 'discount_percentage', 'discounted_price', 'item', 'price_type'
+            'id', 'image', 'name', 'name', 'price','item', 'price_type'
         ]
 
-    def get_discounted_price(self, obj):
-        return (obj.price / 100) * obj.discount_percentage if obj.is_discount == True and obj.discount_percentage else 0
 
-
-class CategorySubCategorySerializer(serializers.ModelSerializer):
+class FifthCategorySerializer(serializers.ModelSerializer):
     category_number = serializers.SerializerMethodField(method_name='get_category_number')
 
     class Meta:
-        model = models.Category
+        model = models.FifthCategroy
         fields = ['id', 'name', "image", 'category_number']
 
     def get_category_number(self, obj):
+        return 5
+
+class CategorySubCategorySerializer(serializers.ModelSerializer):
+    category_number = serializers.SerializerMethodField(method_name='get_category_number')
+    fifth_category = serializers.SerializerMethodField(method_name='get_sub_category')
+
+    class Meta:
+        model = models.Category
+        fields = ['id', 'name', "image", 'category_number', 'fifth_category']
+
+    def get_category_number(self, obj):
         return 4
+
+    def get_sub_category(self, obj):
+        fifth_category = models.FifthCategroy.objects.filter(category_id=obj.id)
+        return FifthCategorySerializer(fifth_category, many=True).data if fifth_category else None
+
 
 class ProductCategorySerializer(serializers.ModelSerializer):
     sub_category = serializers.SerializerMethodField(method_name='get_sub_category')
@@ -53,51 +64,6 @@ class ProductCategorySerializer(serializers.ModelSerializer):
     def get_category_number(self, obj):
         return 3
 
-class ProductBrandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ProductBrand
-        fields = [
-            'id', 'name', 'name'
-        ]
-
-
-class ProductColorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Colors
-        fields = [
-            'id', 'rgba_name', 'name'
-        ]
-
-
-class InfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.InfoName
-        fields = [
-            'id', 'name'
-        ]
-
-
-class TechInfoSerializer(serializers.ModelSerializer):
-    infos = serializers.SerializerMethodField(method_name='get_infos')
-
-    class Meta:
-        model = models.TechnicalInfoName
-        fields = [
-            'id', 'name', 'infos'
-        ]
-
-    def get_infos(self, obj):
-        infos = models.InfoName.objects.filter(tech_info__id=obj.id)
-        return InfoSerializer(infos, many=True).data
-
-
-class ColorsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Colors
-        fields = [
-            'id', 'rgba_name', 'name'
-        ]
-
 
 class ProductMediasSerializer(serializers.ModelSerializer):
     class Meta:
@@ -106,59 +72,27 @@ class ProductMediasSerializer(serializers.ModelSerializer):
             'id', 'media'
         ]
 
-
-class ProductTecInfoSerializer(serializers.ModelSerializer):
-    tech_info_id = serializers.IntegerField(source='tech_info.id')
-    tech_info = serializers.CharField(source='tech_info.name')
-    info_name_id = serializers.IntegerField(source='info_name.id')
-    info_name = serializers.CharField(source='info_name.name')
-
+class ProductInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductInfo
-        fields = ['tech_info_id', 'tech_info', 'info_name_id', 'info_name']
+        fields = ['id', 'name', 'text']
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category_name = serializers.SerializerMethodField(method_name='get_category_name')
-    category_id = serializers.SerializerMethodField(method_name='get_category_id')
-    brand_name = serializers.SerializerMethodField(method_name='get_brand_name')
-    brand_id = serializers.SerializerMethodField(method_name='get_brand_id')
-    discount_price = serializers.SerializerMethodField(method_name='get_discount_price')
-    medias = serializers.SerializerMethodField(method_name='get_medias')
-    colors = serializers.SerializerMethodField(method_name='get_colors')
-    infos = serializers.SerializerMethodField(method_name='get_infos')
-
+    infos = serializers.SerializerMethodField(method_name="get_infos")
+    
     class Meta:
         model = models.Product
         fields = [
-            'id', 'category_name', 'category_id', 'brand_name', 'brand_id', 'name', 'name', 'price', 'image',
-            'discount_percentage', 'is_discount', 'discount_price', 'medias', 'colors', 'infos', 'item', 'price_type'
+            'id', 'name', 'description','quantity_left', 'price', 'price_type', 'item', 'image', 'infos'
         ]
-
-    def get_category_name(self, obj):
-        return obj.category.name if obj.category else None
-
-    def get_category_id(self, obj):
-        return obj.category.id if obj.category else None
-
-    def get_brand_name(self, obj):
-        return obj.brand if obj.brand else None
-
-    def get_brand_id(self, obj):
-        return obj.brand.id if obj.brand else None
-
-    def get_discount_price(self, obj):
-        return obj.price - ((obj.price / 100) * obj.discount_percentage) if obj.is_discount == True and obj.discount_percentage and obj.price > 0 else 0
-
-    def get_colors(self, obj):
-        return ColorsSerializer(obj.colors, many=True).data
 
     def get_medias(self, obj):
         return ProductMediasSerializer(models.ProductMedia.objects.filter(product=obj), many=True).data
 
     def get_infos(self, obj):
-        infos = obj.infos.all()
-        return ProductTecInfoSerializer(infos, many=True).data
+        infos = models.ProductInfo.objects.filter(product=obj)
+        return ProductInfoSerializer(infos, many=True).data if infos else None
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -176,7 +110,6 @@ class CategorySerializer(serializers.ModelSerializer):
 class SubCategorySerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField(method_name='get_products')
     categories = serializers.SerializerMethodField(method_name='get_categories')
-    serializers.SerializerMethodField(method_name='get_category_number')
 
     class Meta:
         model = models.SubCategory
