@@ -104,7 +104,7 @@ class Product(BaseModel):
 class ProductInfo(BaseModel):
     name = models.CharField(max_length=250)
     text = models.TextField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_infos')
 
     def __str__(self):
         return self.name

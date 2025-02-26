@@ -43,8 +43,7 @@ class CategorySubCategorySerializer(serializers.ModelSerializer):
         return 4
 
     def get_sub_category(self, obj):
-        fifth_category = models.FifthCategroy.objects.filter(category_id=obj.id)
-        return FifthCategorySerializer(fifth_category, many=True).data if fifth_category else None
+        return FifthCategorySerializer(obj.fifth_categroy, many=True).data if obj.fifth_categroy else None
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
@@ -58,8 +57,7 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         ]
 
     def get_sub_category(self, obj):
-        categories = models.Category.objects.filter(product_category=obj).distinct()
-        return CategorySubCategorySerializer(categories, many=True).data
+        return CategorySubCategorySerializer(obj.categories, many=True).data
 
     def get_category_number(self, obj):
         return 3
@@ -91,8 +89,7 @@ class ProductSerializer(serializers.ModelSerializer):
         return ProductMediasSerializer(models.ProductMedia.objects.filter(product=obj), many=True).data
 
     def get_infos(self, obj):
-        infos = models.ProductInfo.objects.filter(product=obj)
-        return ProductInfoSerializer(infos, many=True).data if infos else None
+        return ProductInfoSerializer(obj.product_infos, many=True).data if obj.product_infos else None
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -154,8 +151,7 @@ class SubCategoryListSerializer(serializers.ModelSerializer):
         fields = ['id', 'name','category_number', 'categories', "image"]
 
     def get_categories(self, obj):
-        categories = models.ProductCategory.objects.filter(sub_category=obj).distinct()
-        return ProductCategorySerializer(categories, many=True).data
+        return ProductCategorySerializer(obj.product_categories, many=True).data
 
     def get_category_number(self, obj):
         return 2
@@ -169,9 +165,9 @@ class CategoriesListSerializer(serializers.ModelSerializer):
         fields = ['id', 'name','category_number', 'sub_categories', "image"]
 
     def get_sub_categories(self, obj):
-        sub_categories = models.SubCategory.objects.filter(main_category=obj).distinct()
-        return SubCategoryListSerializer(sub_categories, many=True).data
-
+        return SubCategoryListSerializer(obj.sub_categories, many=True).data
+        
+    
     def get_category_number(self, obj):
         return 1
 

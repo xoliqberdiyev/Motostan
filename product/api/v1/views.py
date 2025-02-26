@@ -65,9 +65,8 @@ class SubSubProductByCategoryApiView(generics.ListAPIView):
 
 class ProductDetailApiView(views.APIView):
     def get(self, request, id):
-        try:
-            product = models.Product.objects.get(id=id)
-        except models.Product.DoesNotExist:
+        product = models.Product.objects.filter(id=id).prefetch_related('product_infos').first()
+        if product == None:  
             return Response({'message': 'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.ProductSerializer(product)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -82,7 +81,9 @@ class MainCategoryApiView(views.APIView):
 
 class CategoriesListApiView(views.APIView):
     def get(self, request):
-        categories = models.MainCategory.objects.order_by('created_at').distinct()
+        categories = models.MainCategory.objects.prefetch_related(
+            'sub_categories', 'sub_categories__product_categories', 'sub_categories__product_categories__categories', 'sub_categories__product_categories__categories__fifth_categroy',
+            ).order_by('created_at').distinct()
         serializer = serializers.CategoriesListSerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
