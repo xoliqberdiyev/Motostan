@@ -78,15 +78,16 @@ class ProductInfoSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     infos = serializers.SerializerMethodField(method_name="get_infos")
-    
+    medias = serializers.SerializerMethodField(method_name='get_medias')
+
     class Meta:
         model = models.Product
         fields = [
-            'id', 'name', 'description','quantity_left', 'price', 'price_type', 'item', 'image', 'infos'
+            'id', 'name', 'description','quantity_left', 'price', 'price_type', 'item', 'image', 'infos', 'medias'
         ]
 
     def get_medias(self, obj):
-        return ProductMediasSerializer(models.ProductMedia.objects.filter(product=obj), many=True).data
+        return ProductMediasSerializer(obj.medias, many=True).data
 
     def get_infos(self, obj):
         return ProductInfoSerializer(obj.product_infos, many=True).data if obj.product_infos else None

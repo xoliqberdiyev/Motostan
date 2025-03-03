@@ -65,7 +65,7 @@ class SubSubProductByCategoryApiView(generics.ListAPIView):
 
 class ProductDetailApiView(views.APIView):
     def get(self, request, id):
-        product = models.Product.objects.filter(id=id).prefetch_related('product_infos').first()
+        product = models.Product.objects.filter(id=id).prefetch_related('product_infos', 'medias').first()
         if product == None:  
             return Response({'message': 'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.ProductSerializer(product)
@@ -97,7 +97,7 @@ class SearchApiView(generics.GenericAPIView):
         query =serializer.validated_data.get('search', '')
         products = models.Product.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query).exclude(image='')
+        ).filter(search_field__icontains=query)
 
         main_category = models.MainCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
