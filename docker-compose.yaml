@@ -1,0 +1,45 @@
+services:
+  django_app:
+    build: 
+      context: .
+      dockerfile: Dockerfile 
+    ports:
+      - 8000:8000
+    container_name: django_app 
+    environment:
+      - SECRET_KEY=django-insecure-sst-8b&5d*w9os)i$!72xv8)vpxxt%+t&hs75-fkk17v^b%_85      
+      - DEBUG=True
+      - ALLOWED_HOSTS=*
+      - DB_NAME=moto_db
+      - DB_USER=moto
+      - DB_PASSWORD=motopassword
+      - DB_HOST=postgres_db
+      - DB_PORT=5432
+    networks:
+      - django_app_network
+    depends_on:
+      - postgres_db
+    volumes:
+      - .:/app
+
+  postgres_db:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      - POSTGRES_USER=moto
+      - POSTGRES_PASSWORD=motopassword
+      - POSTGRES_DB=moto_db
+      - POSTGRES_HOST=postgres_db
+      - POSTGRES_PORT=5432
+    restart: always
+    networks:
+      - django_app_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  django_app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

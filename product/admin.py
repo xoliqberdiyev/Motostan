@@ -1,8 +1,13 @@
-from django.contrib import admin
+import os 
+from django.contrib import admin, messages
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
 from django.db.models import Count
+from django.urls import path
+from django.shortcuts import redirect
+from django.http import HttpResponse
+
 
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
@@ -12,14 +17,33 @@ class ProductMedia(admin.TabularInline):
     model = models.ProductMedia
     extra = 1
 
-
 @admin.register(models.Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductModelAdmin(admin.ModelAdmin):
+    change_list_template = "admin/custom_changelist.html"
     search_fields = ['name', 'item']
     list_display = ["name","item", 'image']
     list_filter = ['main_category']
     list_editable = ['image']
     inlines = [ProductMedia]
+
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('admin/product/product/', self.update_data, name='update_data'),
+        ]
+        return custom_urls + urls
+
+    def update_data(self, request):
+        file_path = "/var/www/backend/moto"  
+        os.system(f"cd {file_path}") 
+        os.system(f'source venv/bin/activate')
+        os.system(f'python utils.py')
+        pwd = os.system("pwd")
+        print(pwd)
+        messages.success(request, "Ma'lumotlar muvaffaqiyatli yangilandi!")
+        return redirect("admin:product_product_changelist")  
+
 
 
 class CategoryInline(admin.StackedInline):

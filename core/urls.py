@@ -41,4 +41,4 @@ urlpatterns += i18n_patterns(
     path('set_languages/', include('django.conf.urls.i18n')),
 )
 
-urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]
+# urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]

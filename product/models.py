@@ -72,7 +72,7 @@ class Product(BaseModel):
     quantity_left = models.CharField(blank=True, null=True, max_length=250)
     price = models.FloatField(default=0)
     price_type = models.CharField(max_length=250, null=True, blank=True)
-    name = models.CharField(max_length=250, unique=True)
+    name = models.CharField(max_length=250)
     item = models.CharField(max_length=250, null=True, blank=True)
     image = models.ImageField(upload_to='product/images/', null=True, blank=True)
     main_category = models.ForeignKey(MainCategory, on_delete=models.SET_NULL, related_name='products', null=True, blank=True)

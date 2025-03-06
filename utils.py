@@ -157,9 +157,9 @@ def create_or_update_products(data):
         category4 = get_or_create_category4(product['category']['level4'], category3) 
         category5 = get_or_create_category5(product['category']['level5'], category4)  
         p, created = models.Product.objects.update_or_create(
-            name=name,
+            item=article,
             defaults={
-                "item": article,
+                "name": name,
                 "description": description,
                 "price": price if price != None else 0,
                 "price_type": price_type,
