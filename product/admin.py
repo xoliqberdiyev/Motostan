@@ -43,7 +43,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     def update_data(self, request):
         file_path = "/var/www/backend/moto"
         # venv_path = os.path.join(file_path, "venv", "bin", "activate")
-        os.system(f"cd {file_path} && source venv/bin/activate && python3 utils.py")    
+        os.system(f"cd {file_path} && . venv/bin/activate && python3 utils.py")    
         # Skriptni to‘g‘ri ishga tushirish
         # commands = [
             # f"cd {file_path} && source venv/bin/activate && python3 utils.py",
