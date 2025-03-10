@@ -42,7 +42,7 @@ class ProductModelAdmin(admin.ModelAdmin):
         file_path = "/var/www/backend/moto"  
         os.system(f"cd {file_path}") 
         os.system(f'. venv/bin/activate')
-        os.system(f'python utils.py')
+        os.system(f'python3 utils.py')
         # pwd = os.system("pwd")
         # ls = os.system('ls')
         # print(ls)
