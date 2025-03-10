@@ -88,6 +88,7 @@ class Product(BaseModel):
         verbose_name = _('product')
         verbose_name_plural = _('products')
 
+
     def clean(self):
         if self.sub_category and self.main_category and self.category and self.category_sub_category:
             if self.sub_category.main_category != self.main_category:
@@ -112,6 +113,8 @@ class ProductInfo(BaseModel):
     class Meta:
         verbose_name = 'product info'
         verbose_name_plural = 'product infos'
+        unique_together = ("product", "name")  # Har bir product uchun name yagona bo‘lishi kerak
+
 
 
 class ProductMedia(BaseModel):

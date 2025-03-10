@@ -173,11 +173,7 @@ def create_or_update_products(data):
         )
         if product['additional_properties'] != []:
             for key,value in product['additional_properties'].items():
-                obj = models.ProductInfo.objects.filter(product=p, name=key)
-                if obj.exists():
-                    obj.update(text=value)  # mavjud bo‘lsa, yangilaydi
-                else:
-                    models.ProductInfo.objects.create(product=p, name=key, text=value)  # mavjud bo‘lmasa, yaratadi
+                info, created = models.ProductInfo.objects.update_or_create(product=p, name=key, defaults={'text': value})
         i+=1
     print(f'{i} product created')
 create_or_update_products(get_data())
