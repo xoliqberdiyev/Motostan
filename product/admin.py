@@ -43,6 +43,7 @@ class ProductModelAdmin(admin.ModelAdmin):
         os.system(f"cd {file_path}") 
         os.system(f'. venv/bin/activate')
         os.system(f'python3 utils.py')
+        os.system(f'pip3 install -r requirements.txt')
         # pwd = os.system("pwd")
         # ls = os.system('ls')
         # print(ls)
