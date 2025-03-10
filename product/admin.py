@@ -7,6 +7,8 @@ from django.db.models import Count
 from django.urls import path
 from django.shortcuts import redirect
 from django.http import HttpResponse
+import subprocess
+    
 
 
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
@@ -39,15 +41,20 @@ class ProductModelAdmin(admin.ModelAdmin):
         return custom_urls + urls
 
     def update_data(self, request):
-        file_path = "/var/www/backend/moto"  
-        os.system(f"cd {file_path}") 
-        os.system(f'. venv/bin/activate')
-        os.system(f'python3 utils.py')
-        os.system(f'pip3 install -r requirements.txt')
-        # pwd = os.system("pwd")
-        # ls = os.system('ls')
-        # print(ls)
-        # print(pwd)
+        file_path = "/var/www/backend/moto"
+        venv_path = os.path.join(file_path, "venv", "bin", "activate")
+
+        # Skriptni to‘g‘ri ishga tushirish
+        commands = [
+            f"cd {file_path} && source venv/bin/activate && python3 utils.py",
+            f"cd {file_path} && source venv/bin/activate && pip3 install -r requirements.txt",
+        ]
+
+        for cmd in commands:
+            process = subprocess.run(cmd, shell=True, text=True, capture_output=True)
+            if process.returncode != 0:
+                return {"error": process.stderr}
+
         messages.success(request, "Ma'lumotlar muvaffaqiyatli yangilandi!")
         return redirect("admin:product_product_changelist")  
 
