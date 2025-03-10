@@ -41,7 +41,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     def update_data(self, request):
         file_path = "/var/www/backend/moto"  
         os.system(f"cd {file_path}") 
-        os.system(f'source venv/bin/activate')
+        os.system(f'. venv/bin/activate')
         os.system(f'python utils.py')
         # pwd = os.system("pwd")
         # ls = os.system('ls')
