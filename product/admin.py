@@ -17,6 +17,10 @@ class ProductMedia(admin.TabularInline):
     model = models.ProductMedia
     extra = 1
 
+class ProductInfo(admin.TabularInline):
+    model = models.ProductInfo
+    extra = 0
+
 @admin.register(models.Product)
 class ProductModelAdmin(admin.ModelAdmin):
     change_list_template = "admin/custom_changelist.html"
@@ -24,7 +28,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_display = ["name","item", 'image']
     list_filter = ['main_category']
     list_editable = ['image']
-    inlines = [ProductMedia]
+    inlines = [ProductMedia, ProductInfo]
 
 
     def get_urls(self):
