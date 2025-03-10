@@ -141,9 +141,10 @@ def create_or_update_products(data):
             continue
         if name_text == None or name_text == '':
             continue 
-        
-        name = replace_slash_with_space(name_text)
         article = replace_slash_with_space(product.get('article'))
+        if article == None or article == "":
+            continue
+        name = replace_slash_with_space(name_text)
         description = replace_slash_with_space(product.get('description'))
         price = product["price"] if product['price'] != "" or product['price'] != None else 0
         if price != None:
