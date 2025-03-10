@@ -124,12 +124,13 @@ def delete_data(data):
     if deleted_fifth_categories:
         models.FifthCategroy.objects.filter(name__in=deleted_fifth_categories).delete()
 
-    product_names = {product.name for product in models.Product.objects.all()}
-    product_1_names = {replace_slash_with_space(product['display_name']) for product in data}
+    product_names = {product.item for product in models.Product.objects.all()}
+    product_1_names = {replace_slash_with_space(product['article']) for product in data}
 
     deleted_products = product_names - product_1_names
     if deleted_products:
-        models.Product.objects.filter(name__in=deleted_products).delete()
+        models.Product.objects.filter(item__in=deleted_products).delete()
+        models.Product.objects.filter(item__isnull=True).delete()
 
 def create_or_update_products(data):
     delete_data(data)
