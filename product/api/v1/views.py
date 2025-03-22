@@ -10,7 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 from django_filters.rest_framework import DjangoFilterBackend
 
 from product.api.v1 import serializers, filters
-from product import models, pagination
+from product import models, pagination, document
 
 
 class DiscountedProductApiView(views.APIView):
@@ -95,9 +95,10 @@ class SearchApiView(generics.GenericAPIView):
         serializer = serializers.SearchSerializer(data=request.data)
         serializer.is_valid()
         query =serializer.validated_data.get('search', '')
-        products = models.Product.objects.annotate(
-            search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)
+        # products = models.Product.objects.annotate(
+        #     search_field=Concat('name', Value(''), output_field=CharField())
+        # ).filter(search_field__icontains=query)
+        products = document.ProductDocument.search().query('match', name=query)
 
         main_category = models.MainCategory.objects.annotate(
             search_field=Concat('name', Value(''), output_field=CharField())
@@ -119,9 +120,10 @@ class SearchApiView(generics.GenericAPIView):
             search_field=Concat('name', Value(''), output_field=CharField())
         ).filter(search_field__icontains=query)[:5]
 
-        item = models.Product.objects.annotate(
-            search_field=Concat('item', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)
+        # item = models.Product.objects.annotate(
+        #     search_field=Concat('item', Value(''), output_field=CharField())
+        # ).filter(search_field__icontains=query)
+        item = document.ProductDocument.search().query('match', item=query)
 
         return Response({
             'products': serializers.ProductsSerializer(products, many=True).data,

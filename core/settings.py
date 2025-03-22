@@ -94,6 +94,13 @@ DATABASES = {
 }
 
 
+ELASTICSEARCH_DSL={
+    'default': {
+        'hosts': 'localhost:9200',
+        'http_auth': ('username', 'password')
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
