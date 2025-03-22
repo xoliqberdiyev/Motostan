@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
+    'django_elasticsearch_dsl',
     # 'silk',
     # local apps
     'common',
@@ -96,8 +97,7 @@ DATABASES = {
 
 ELASTICSEARCH_DSL={
     'default': {
-        'hosts': 'localhost:9200',
-        'http_auth': ('username', 'password')
+        "hosts": "http://localhost:9200",
     }
 }
 
