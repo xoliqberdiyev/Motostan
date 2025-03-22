@@ -30,7 +30,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     inlines = [ProductMedia, ProductInfo]
     fieldsets = (
         ('Asosiy ma\'lumotlar', {
-            'fields': ('name', 'image')
+            'fields': ('name', 'image', 'main_category', 'category', 'sub_category')
         }),
     )
 
