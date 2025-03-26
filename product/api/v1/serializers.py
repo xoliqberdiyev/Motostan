@@ -27,17 +27,17 @@ class ProductsSerializer(serializers.ModelSerializer):
         ]
 
     def get_main_category(self, obj):
-        return obj.main_category.name
+        return obj.main_category.name if obj.main_category else None 
 
     def get_sub_category(self, obj):
-        return obj.sub_category.name
+        return obj.sub_category.name if obj.sub_category else None 
     def get_category(self, obj):
-            return obj.category.name
+            return obj.category.name if obj.category else None 
     def get_category_sub_category(self, obj):
-            return obj.category_sub_category.name
+            return obj.category_sub_category.name if obj.category_sub_category else None 
     
     def get_fifth_category(self, obj):
-        return obj.fifth_category.name
+        return obj.fifth_category.name if obj.fifth_catergory else None 
 
 
 class FifthCategorySerializer(serializers.ModelSerializer):
