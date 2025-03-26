@@ -24,3 +24,10 @@ class BannerApiView(views.APIView):
         query = models.Banner.objects.all()
         serializer = serializers.BannerSerializer(query, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class PhoneNumberListApiView(views.APIView):
+    def get(self, request):
+        query = models.PhoneNumber.objects.all()
+        serializer = serializers.PhoneNumberListSerializer(query, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

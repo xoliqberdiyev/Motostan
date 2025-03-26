@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
-    'django_elasticsearch_dsl',
+    # 'django_elasticsearch_dsl',
     # 'silk',
     # local apps
     'common',

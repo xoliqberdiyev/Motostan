@@ -25,3 +25,9 @@ class BannerSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'image_uz', 'image_ru'
         ]
+
+    
+class PhoneNumberListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PhoneNumber
+        fields = ['id', 'number']

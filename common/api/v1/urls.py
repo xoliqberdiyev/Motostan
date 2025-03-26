@@ -6,4 +6,5 @@ urlpatterns = [
     path('about-us/', views.AboutUsApiView.as_view(), name='about-us'),
     path('advertisement/', views.AdvertisementApiView.as_view(), name='advertisement-list'),
     path('banner/', views.BannerApiView.as_view(), name='banner-list'),
+    path('phone-number/list/', views.PhoneNumberListApiView.as_view(),),
 ]

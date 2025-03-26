@@ -40,3 +40,10 @@ class Advertisement(BaseModel):
         verbose_name = _('advertisement')
         verbose_name_plural = _('advertisements')
 
+
+class PhoneNumber(BaseModel):
+    number = models.CharField(max_length=15) 
+
+    def __str__(self):
+        return self.number
+    

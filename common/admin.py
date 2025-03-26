@@ -18,3 +18,8 @@ class AdvertisementAdmin(admin.ModelAdmin):
 @admin.register(models.Banner)
 class BannerAdmin(admin.ModelAdmin):
     list_display = ['id', 'image_uz', 'image_ru']
+
+
+@admin.register(models.PhoneNumber)
+class PhoneNumberAdmin(admin.ModelAdmin):
+    list_display = ['id', 'number']
