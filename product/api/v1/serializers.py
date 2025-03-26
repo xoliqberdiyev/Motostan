@@ -37,7 +37,7 @@ class ProductsSerializer(serializers.ModelSerializer):
             return obj.category_sub_category.name if obj.category_sub_category else None 
     
     def get_fifth_category(self, obj):
-        return obj.fifth_category.name if obj.fifth_catergory else None 
+        return obj.fifth_category.name if obj.fifth_category else None 
 
 
 class FifthCategorySerializer(serializers.ModelSerializer):
