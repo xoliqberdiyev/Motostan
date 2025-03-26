@@ -14,11 +14,30 @@ class DiscountedProductSerializer(serializers.ModelSerializer):
 
 
 class ProductsSerializer(serializers.ModelSerializer):
+    main_category = serializers.SerializerMethodField(method_name='get_main_category')
+    sub_category = serializers.SerializerMethodField(method_name='get_sub_category')
+    category = serializers.SerializerMethodField(method_name='get_category')
+    category_sub_category = serializers.SerializerMethodField(method_name='get_category_sub_category')
+    fifth_category = serializers.SerializerMethodField(method_name='get_fifth_category')
+
     class Meta:
         model = models.Product
         fields = [
-            'id', 'image', 'name', 'name', 'price','item', 'price_type', 'main_category__name', 'sub_category__name', 'category__name', 'category_sub_category__name', 'fifth_category__name',
+            'id', 'image', 'name', 'name', 'price','item', 'price_type', 'main_category', 'sub_category', 'category', 'category_sub_category', 'fifth_category',
         ]
+
+    def get_main_category(self, obj):
+        return obj.main_category.name
+
+    def get_sub_category(self, obj):
+        return obj.sub_category.name
+    def get_category(self, obj):
+            return obj.category.name
+    def get_category_sub_category(self, obj):
+            return obj.category_sub_category.name
+    
+    def get_fifth_category(self, obj):
+        return obj.fifth_category.name
 
 
 class FifthCategorySerializer(serializers.ModelSerializer):
