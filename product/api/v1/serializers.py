@@ -98,11 +98,18 @@ class ProductInfoSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     infos = serializers.SerializerMethodField(method_name="get_infos")
     medias = serializers.SerializerMethodField(method_name='get_medias')
+    main_category = serializers.SerializerMethodField(method_name='get_main_category')
+    sub_category = serializers.SerializerMethodField(method_name='get_sub_category')
+    category = serializers.SerializerMethodField(method_name='get_category')
+    category_sub_category = serializers.SerializerMethodField(method_name='get_category_sub_category')
+    fifth_category = serializers.SerializerMethodField(method_name='get_fifth_category')
 
     class Meta:
         model = models.Product
         fields = [
-            'id', 'name', 'description','quantity_left', 'price', 'price_type', 'item', 'image', 'infos', 'medias'
+            'id', 'name', 'description','quantity_left', 'price', 'price_type', 'item', 'image', 'infos', 'medias', 
+            'main_category', 'sub_category', 'category', 'category_sub_category', 'fifth_category',
+
         ]
 
     def get_medias(self, obj):
@@ -110,6 +117,20 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_infos(self, obj):
         return ProductInfoSerializer(obj.product_infos, many=True).data if obj.product_infos else None
+    
+
+    def get_main_category(self, obj):
+        return obj.main_category.name if obj.main_category else None 
+
+    def get_sub_category(self, obj):
+        return obj.sub_category.name if obj.sub_category else None 
+    def get_category(self, obj):
+            return obj.category.name if obj.category else None 
+    def get_category_sub_category(self, obj):
+            return obj.category_sub_category.name if obj.category_sub_category else None 
+    
+    def get_fifth_category(self, obj):
+        return obj.fifth_category.name if obj.fifth_category else None 
 
 
 class CategorySerializer(serializers.ModelSerializer):
