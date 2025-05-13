@@ -1,13 +1,9 @@
 import os 
+
 from django.contrib import admin, messages
-from django.utils.safestring import mark_safe
-from django.utils.html import format_html, urlencode
-from django.urls import reverse
-from django.db.models import Count
 from django.urls import path
 from django.shortcuts import redirect
-from django.http import HttpResponse
-from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
+
 from product import models
 
 
@@ -30,7 +26,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     inlines = [ProductMedia, ProductInfo]
     fieldsets = (
         ('Asosiy ma\'lumotlar', {
-            'fields': ('name', 'image',)
+            'fields': ('name', 'image', 'item')
         }),
     )
 
@@ -46,6 +42,18 @@ class ProductModelAdmin(admin.ModelAdmin):
         os.system(f"cd {file_path} && . venv/bin/activate && python3 utils.py")    
         messages.success(request, "Ma'lumotlar muvaffaqiyatli yangilandi!")
         return redirect("admin:product_product_changelist")  
+
+    def changelist_view(self, request, extra_context=None):
+        products = models.Product.objects.all()
+        product_count = products.count()
+        product_with_image = products.filter(image__isnull=False).exclude(image='').count()
+        product_without_image = product_count - product_with_image
+        extra_context = extra_context or {}
+        extra_context['product_count'] = product_count
+        extra_context['product_without_image'] = product_without_image
+        extra_context['product_with_image'] = product_with_image
+
+        return super().changelist_view(request, extra_context=extra_context)
 
 
 @admin.register(models.ProductInfo)
