@@ -1,0 +1,11 @@
+.drag-wrapper {
+    border: 2px dashed #888;
+    padding: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.drag-wrapper.drag-over {
+    background-color: #f0f0f0;
+    border-color: #444;
+}

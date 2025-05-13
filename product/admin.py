@@ -4,7 +4,7 @@ from django.contrib import admin, messages
 from django.urls import path
 from django.shortcuts import redirect
 
-from product import models
+from product import models, form
 
 
 class ProductMedia(admin.TabularInline):
@@ -24,11 +24,8 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_filter = ['main_category']
     list_editable = ['image']
     inlines = [ProductMedia, ProductInfo]
-    fieldsets = (
-        ('Asosiy ma\'lumotlar', {
-            'fields': ('name', 'image', 'item')
-        }),
-    )
+    form = form.Productorm
+    
 
     def get_urls(self):
         urls = super().get_urls()
