@@ -11,7 +11,6 @@ urlpatterns = [
     path('third/category/<int:category_id>/products/', views.ProductByCategoryApiView.as_view(), name='category-infos'),
     path('fifth/category/<int:category_id>/products/', views.ProductByFifthCategoryApiView.as_view(), name='category-infos'),
     path('product/<int:id>/', views.ProductDetailApiView.as_view(), name='category-infos'),
-    # path('main-category/list/', views.MainCategoryApiView.as_view(), name='main-category'),
     path('categories/list/', views.CategoriesListApiView.as_view(), name='main-category'),
     path('search/', views.SearchApiView.as_view(), name='search'),
 ]

@@ -117,20 +117,21 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_infos(self, obj):
         return ProductInfoSerializer(obj.product_infos, many=True).data if obj.product_infos else None
-    
 
     def get_main_category(self, obj):
-        return obj.main_category.name if obj.main_category else None 
+        return {"id": obj.main_category.id, "name": obj.main_category.name} if obj.main_category else None
 
     def get_sub_category(self, obj):
-        return obj.sub_category.name if obj.sub_category else None 
+        return {"id":obj.sub_category.id, "name": obj.sub_category.name} if obj.sub_category else None
+
     def get_category(self, obj):
-            return obj.category.name if obj.category else None 
+            return {"id": obj.category.id, "name": obj.category.name} if obj.category else None
+
     def get_category_sub_category(self, obj):
-            return obj.category_sub_category.name if obj.category_sub_category else None 
+            return {"id": obj.category_sub_category.id, "name":obj.category_sub_category.name} if obj.category_sub_category else None
     
     def get_fifth_category(self, obj):
-        return obj.fifth_category.name if obj.fifth_category else None 
+        return {"id": obj.fifth_category.id, "name": obj.fifth_category.name} if obj.fifth_category else None
 
 
 class CategorySerializer(serializers.ModelSerializer):

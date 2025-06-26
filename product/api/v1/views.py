@@ -66,7 +66,7 @@ class SubSubProductByCategoryApiView(generics.ListAPIView):
 class ProductDetailApiView(views.APIView):
     def get(self, request, id):
         product = models.Product.objects.filter(id=id).prefetch_related('product_infos', 'medias').first()
-        if product == None:  
+        if product is None:
             return Response({'message': 'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.ProductSerializer(product)
         return Response(serializer.data, status=status.HTTP_200_OK)
