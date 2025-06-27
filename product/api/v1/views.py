@@ -120,9 +120,7 @@ class SearchApiView(generics.GenericAPIView):
         #     search_field=Concat('name', Value(''), output_field=CharField())
         # ).filter(search_field__icontains=query)[:5]
 
-        item = models.Product.objects.annotate(
-            search_field=Concat('item', Value(''), output_field=CharField())
-        ).filter(search_field__startswith=query)
+        item = models.Product.objects.filter(item__startswith=query)
         # item = document.ProductDocument.search().query('match', item=query)
 
         return Response({
