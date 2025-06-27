@@ -95,30 +95,30 @@ class SearchApiView(generics.GenericAPIView):
         serializer = serializers.SearchSerializer(data=request.data)
         serializer.is_valid()
         query =serializer.validated_data.get('search', '')
-        products = models.Product.objects.annotate(
-            search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)
-        # products = document.ProductDocument.search().query('match', name=query)
-
-        main_category = models.MainCategory.objects.annotate(
-            search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:5]
-
-        sub_category = models.SubCategory.objects.annotate(
-            search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:5]
-
-        sub_sub_category = models.ProductCategory.objects.annotate(
-            search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:5]
-
-        category = models.Category.objects.annotate(
-            search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:5]
-
-        fifth_category = models.FifthCategroy.objects.annotate(
-            search_field=Concat('name', Value(''), output_field=CharField())
-        ).filter(search_field__icontains=query)[:5]
+        # products = models.Product.objects.annotate(
+        #     search_field=Concat('name', Value(''), output_field=CharField())
+        # ).filter(search_field__icontains=query)
+        # # products = document.ProductDocument.search().query('match', name=query)
+        #
+        # main_category = models.MainCategory.objects.annotate(
+        #     search_field=Concat('name', Value(''), output_field=CharField())
+        # ).filter(search_field__icontains=query)[:5]
+        #
+        # sub_category = models.SubCategory.objects.annotate(
+        #     search_field=Concat('name', Value(''), output_field=CharField())
+        # ).filter(search_field__icontains=query)[:5]
+        #
+        # sub_sub_category = models.ProductCategory.objects.annotate(
+        #     search_field=Concat('name', Value(''), output_field=CharField())
+        # ).filter(search_field__icontains=query)[:5]
+        #
+        # category = models.Category.objects.annotate(
+        #     search_field=Concat('name', Value(''), output_field=CharField())
+        # ).filter(search_field__icontains=query)[:5]
+        #
+        # fifth_category = models.FifthCategroy.objects.annotate(
+        #     search_field=Concat('name', Value(''), output_field=CharField())
+        # ).filter(search_field__icontains=query)[:5]
 
         item = models.Product.objects.annotate(
             search_field=Concat('item', Value(''), output_field=CharField())
@@ -126,12 +126,7 @@ class SearchApiView(generics.GenericAPIView):
         # item = document.ProductDocument.search().query('match', item=query)
 
         return Response({
-            'products': serializers.ProductsSerializer(products, many=True).data,
-            'main_categories': serializers.MainCategorySearchSerializer(main_category, many=True).data,
-            'sub_categories': serializers.SubCategorySearchSerializer(sub_category, many=True).data,
-            'sub_sub_categories': serializers.ProductCategorySearchSerializer(sub_sub_category, many=True).data,
-            'categories': serializers.CategorySearchSerializer(category, many=True).data,
-            'fifth_categroy': serializers.FifthCategorySerializer(fifth_category, many=True).data,
+            # 'products': serializers.ProductsSerializer(products, many=True).data,
             "item": serializers.ProductsSerializer(item, many=True).data,
         })
     
