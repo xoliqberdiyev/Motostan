@@ -95,7 +95,7 @@ class SearchApiView(generics.GenericAPIView):
         serializer = serializers.SearchSerializer(data=request.data)
         serializer.is_valid()
         query =serializer.validated_data.get('search', '')
-        products = models.Product.objects.filter(name__stratswith=query)
+        products = models.Product.objects.filter(name__startswith=query)
         # # products = document.ProductDocument.search().query('match', name=query)
         #
         # main_category = models.MainCategory.objects.annotate(
