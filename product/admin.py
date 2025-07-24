@@ -25,7 +25,6 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_editable = ['image']
     inlines = [ProductMedia, ProductInfo]
     form = form.Productorm
-    
 
     def get_urls(self):
         urls = super().get_urls()
