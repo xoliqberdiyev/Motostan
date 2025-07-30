@@ -35,6 +35,8 @@ class ProductModelAdmin(admin.ModelAdmin):
 
     def update_data(self, request):
         file_path = "/var/www/backend/moto"
+        # file_path = "/home/behruz/Repid-Projects/moto"
+
         os.system(f"cd {file_path} && . venv/bin/activate && python3 utils.py")    
         messages.success(request, "Ma'lumotlar muvaffaqiyatli yangilandi!")
         return redirect("admin:product_product_changelist")  
@@ -59,3 +61,8 @@ class ProductInfoAdmin(admin.ModelAdmin):
 @admin.register(models.ProductMedia)
 class ProductMediaAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.MainCategory)
+class MainCategory(admin.ModelAdmin):
+    ...

@@ -139,7 +139,7 @@ def create_or_update_products(data):
         name_text = product['display_name']
         main_category = product['category']['level1']
         if main_category == None or main_category == '':
-            continue
+            main_category = models.MainCategory.objects.get_or_create(name='Boshqa')
         if name_text == None or name_text == '':
             continue 
         article = replace_slash_with_space(product.get('article'))
