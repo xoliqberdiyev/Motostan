@@ -21,7 +21,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     change_list_template = "admin/custom_changelist.html"
     search_fields = ['name', 'item']
     list_display = ["name","item", 'image']
-    list_filter = ['main_category']
+    list_filter = ['main_category', 'sub_category', 'category']
     list_editable = ['image']
     inlines = [ProductMedia, ProductInfo]
     form = form.Productorm
