@@ -1,4 +1,3 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -8,7 +7,8 @@ from common.models import BaseModel
 class MainCategory(BaseModel):
     name = models.CharField(max_length=250)
     image = models.ImageField(upload_to='products/', null=True, blank=True)
-    
+    is_active = models.BooleanField(default=True)
+
     def __str__(self):
         return self.name
     

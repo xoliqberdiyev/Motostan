@@ -83,7 +83,7 @@ class CategoriesListApiView(views.APIView):
     def get(self, request):
         categories = models.MainCategory.objects.prefetch_related(
             'sub_categories', 'sub_categories__product_categories', 'sub_categories__product_categories__categories', 'sub_categories__product_categories__categories__fifth_categroy',
-            ).order_by('created_at').distinct()
+            ).filter(is_active=True).order_by('created_at').distinct()
         serializer = serializers.CategoriesListSerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -96,30 +96,7 @@ class SearchApiView(generics.GenericAPIView):
         serializer.is_valid()
         query =serializer.validated_data.get('search', '')
         products = models.Product.objects.filter(name__istartswith=query)
-        # # products = document.ProductDocument.search().query('match', name=query)
-        #
-        # main_category = models.MainCategory.objects.annotate(
-        #     search_field=Concat('name', Value(''), output_field=CharField())
-        # ).filter(search_field__icontains=query)[:5]
-        #
-        # sub_category = models.SubCategory.objects.annotate(
-        #     search_field=Concat('name', Value(''), output_field=CharField())
-        # ).filter(search_field__icontains=query)[:5]
-        #
-        # sub_sub_category = models.ProductCategory.objects.annotate(
-        #     search_field=Concat('name', Value(''), output_field=CharField())
-        # ).filter(search_field__icontains=query)[:5]
-        #
-        # category = models.Category.objects.annotate(
-        #     search_field=Concat('name', Value(''), output_field=CharField())
-        # ).filter(search_field__icontains=query)[:5]
-        #
-        # fifth_category = models.FifthCategroy.objects.annotate(
-        #     search_field=Concat('name', Value(''), output_field=CharField())
-        # ).filter(search_field__icontains=query)[:5]
-
         item = models.Product.objects.filter(item__istartswith=query)
-        # item = document.ProductDocument.search().query('match', item=query)
 
         return Response({
             'products': serializers.ProductsSerializer(products, many=True).data,
