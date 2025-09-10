@@ -83,7 +83,8 @@ class CategoriesListApiView(views.APIView):
     def get(self, request):
         categories = models.MainCategory.objects.prefetch_related(
             'sub_categories', 'sub_categories__product_categories', 'sub_categories__product_categories__categories', 'sub_categories__product_categories__categories__fifth_categroy',
-            ).filter(is_active=True).order_by('created_at').distinct()
+            )\
+            .filter(is_active=True).order_by('created_at').distinct()
         serializer = serializers.CategoriesListSerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
